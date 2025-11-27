@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Autism LLM Screening</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f5f5f5;
+      }
+      .page {
+        max-width: 900px;
+        margin: 32px auto;
+        padding: 24px 20px 40px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 1.8rem;
+      }
+      .question {
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #eee;
+      }
+      .question p {
+        margin: 0 0 8px;
+        font-weight: 500;
+      }
+      .options label {
+        margin-right: 16px;
+      }
+      fieldset {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 12px 16px 16px;
+        margin-bottom: 20px;
+      }
+      legend {
+        padding: 0 4px;
+        font-weight: 600;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 24px;
+        margin-top: 8px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        min-width: 140px;
+      }
+      .field label {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+      }
+      .field input,
+      .field select {
+        padding: 4px 6px;
+        font-size: 0.95rem;
+      }
+      button {
+        margin-top: 16px;
+        padding: 10px 18px;
+        font-size: 1rem;
+        border-radius: 4px;
+        border: none;
+        background: #2563eb;
+        color: #fff;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+      .status {
+        margin-top: 12px;
+        font-size: 0.95rem;
+        color: #555;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 12px 16px;
+        border-radius: 6px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+      }
+      .result strong {
+        font-size: 1.1rem;
+      }
+      .result pre {
+        white-space: pre-wrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.85rem;
+        background: #111827;
+        color: #e5e7eb;
+        padding: 8px 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <h1>Autism Screening (LLM-powered)</h1>
+      <p>
+        Answer the following questions about the child. Each question must be answered with
+        <strong>Yes</strong> or <strong>No</strong>. When you submit, the fine-tuned Mistral model will
+        predict whether the child is at risk of autism (YES / NO).
+      </p>
+
+      <form id="screening-form">
+        <fieldset>
+          <legend>Screening Questions (A1–A10)</legend>
+
+          <div class="question">
+            <p>A1. Does your child look at you when you call his/her name?</p>
+            <div class="options">
+              <label><input type="radio" name="A1" value="1" required /> Yes</label>
+              <label><input type="radio" name="A1" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>A2. How easy is it for you to get eye contact with your child?</p>
+            <div class="options">
+              <label><input type="radio" name="A2" value="1" required /> Yes</label>
+              <label><input type="radio" name="A2" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>
+              A3. Does your child point to indicate that s/he wants something (e.g. a toy that is out of
+              reach)?
+            </p>
+            <div class="options">
+              <label><input type="radio" name="A3" value="1" required /> Yes</label>
+              <label><input type="radio" name="A3" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>
+              A4. Does your child point to share interest with you (e.g. pointing at an interesting sight)?
+            </p>
+            <div class="options">
+              <label><input type="radio" name="A4" value="1" required /> Yes</label>
+              <label><input type="radio" name="A4" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>A5. Does your child pretend (e.g. care for dolls, talk on a toy phone)?</p>
+            <div class="options">
+              <label><input type="radio" name="A5" value="1" required /> Yes</label>
+              <label><input type="radio" name="A5" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>A6. Does your child follow where you're looking?</p>
+            <div class="options">
+              <label><input type="radio" name="A6" value="1" required /> Yes</label>
+              <label><input type="radio" name="A6" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>
+              A7. If you or someone else in the family is visibly upset, does your child show signs of
+              wanting to comfort them?
+            </p>
+            <div class="options">
+              <label><input type="radio" name="A7" value="1" required /> Yes</label>
+              <label><input type="radio" name="A7" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>A8. Would you describe your child's first words as clear and meaningful?</p>
+            <div class="options">
+              <label><input type="radio" name="A8" value="1" required /> Yes</label>
+              <label><input type="radio" name="A8" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>A9. Does your child use simple gestures (e.g. wave goodbye)?</p>
+            <div class="options">
+              <label><input type="radio" name="A9" value="1" required /> Yes</label>
+              <label><input type="radio" name="A9" value="0" /> No</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <p>A10. Does your child stare at nothing with no apparent purpose?</p>
+            <div class="options">
+              <label><input type="radio" name="A10" value="1" required /> Yes</label>
+              <label><input type="radio" name="A10" value="0" /> No</label>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Demographic Information</legend>
+          <div class="row">
+            <div class="field">
+              <label for="age">Age (months)</label>
+              <input id="age" name="Age" type="number" min="0" required />
+            </div>
+
+            <div class="field">
+              <label for="sex">Sex</label>
+              <select id="sex" name="Sex" required>
+                <option value="">Select…</option>
+                <option value="m">Male</option>
+                <option value="f">Female</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="jaundice">Jaundice at birth?</label>
+              <select id="jaundice" name="Jaundice" required>
+                <option value="">Select…</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="family_asd">Family history of ASD?</label>
+              <select id="family_asd" name="Family_ASD" required>
+                <option value="">Select…</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <button type="submit">Submit and Predict</button>
+        <div id="status" class="status"></div>
+      </form>
+
+      <div id="result" class="result" style="display: none">
+        <div><strong>Model prediction:</strong> <span id="prediction"></span></div>
+        <div style="margin-top: 8px"><strong>Raw model output:</strong></div>
+        <pre id="raw-output"></pre>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("screening-form");
+      const statusEl = document.getElementById("status");
+      const resultEl = document.getElementById("result");
+      const predictionEl = document.getElementById("prediction");
+      const rawOutputEl = document.getElementById("raw-output");
+
+      const API_URL = "http://127.0.0.1:8000/predict"; // backend FastAPI server
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        statusEl.textContent = "Calling model… this can take a few seconds.";
+        resultEl.style.display = "none";
+
+        const data = new FormData(form);
+        const payload = {
+          A1: Number(data.get("A1")),
+          A2: Number(data.get("A2")),
+          A3: Number(data.get("A3")),
+          A4: Number(data.get("A4")),
+          A5: Number(data.get("A5")),
+          A6: Number(data.get("A6")),
+          A7: Number(data.get("A7")),
+          A8: Number(data.get("A8")),
+          A9: Number(data.get("A9")),
+          A10: Number(data.get("A10")),
+          Age: Number(data.get("Age")),
+          Sex: data.get("Sex"),
+          Jaundice: data.get("Jaundice"),
+          Family_ASD: data.get("Family_ASD"),
+        };
+
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`Request failed: ${res.status} ${text}`);
+          }
+
+          const json = await res.json();
+          predictionEl.textContent = json.prediction;
+          rawOutputEl.textContent = json.raw_output || "(empty response)";
+          resultEl.style.display = "block";
+          statusEl.textContent = "";
+        } catch (err) {
+          console.error(err);
+          statusEl.textContent = "Error calling backend: " + err.message;
+          resultEl.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>

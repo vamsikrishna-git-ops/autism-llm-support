@@ -1,0 +1,14 @@
+torch 
+torchvision 
+torchaudio 
+transformers 
+datasets 
+peft 
+accelerate 
+bitsandbytes 
+openpyxl 
+pandas 
+scikit-learn 
+trl 
+matplotlib 
+seaborn
